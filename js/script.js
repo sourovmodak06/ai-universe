@@ -1,10 +1,9 @@
 /* ------ load Api ------ */
-const loadApiData = async () => {
-
+const loadApiData = async (dataLimit) => {
 try{
   const res = await fetch(`https://openapi.programming-hero.com/api/ai/tools`);
   const data = await res.json();
-  displayData(data.data.tools);
+  displayData(data.data.tools, dataLimit);
 } 
 catch(error){
     alert(error);
@@ -13,8 +12,17 @@ catch(error){
 };
 
 /* ------ display Data ------ */
-const displayData = (hubData) => {
+const displayData = (hubData, dataLimit) => {
   const cardContainer = document.getElementById("card-container");
+  cardContainer.innerText = '';
+  const seeMore = document.getElementById('see-more');
+    if (dataLimit && hubData.length > 6) {
+        hubData = hubData.slice(0,6);
+        seeMore.classList.remove('hidden');
+    } 
+    else {
+        seeMore.classList.add('hidden');
+    }
 
   hubData.forEach((element) => {
     const cardData = document.createElement("div");
@@ -44,18 +52,20 @@ const displayData = (hubData) => {
     </div>
     `;
     cardContainer.appendChild(cardData);
-    console.log(element.name);
+    // console.log(element);
 });
 };
 
 
+/* ------ Display See More Data ------ */
+document.getElementById('btn-see-more').addEventListener('click', () => {
+    loadApiData(); 
+})
 
-loadApiData();
+loadApiData(6);    
+
 
 
 /*
-<p>How to park your car at your garage?</p>
-            <div class="card-actions justify-end">
-                <button class="btn btn-primary">Learn now!</button>
-            </div>
+
 */
