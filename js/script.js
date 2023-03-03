@@ -59,22 +59,7 @@ const displayData = (hubData, dataLimit) => {
     `;
     cardContainer.appendChild(cardData);
   });
-  // /* ------ Display Sort By Date ------ */
-  //     document.getElementById('sort-by-date').addEventListener('click', () => {
-  //         hubData.sort((x,y) => {
-  //             x = new Date(x.published_in).valueOf();
-  //             y = new Date(y.published_in).valueOf();
-  //             if (x > y) {
-  //                 return 1;
-  //             }
-  //             else if(x < y){
-  //                 return -1;
-  //             }
-  //             else {
-  //                 return 0;
-  //             }
-  //         })
-  //     });
+
 };
 
 /* ------ Display See More Data ------ */
@@ -171,6 +156,79 @@ const modalDetails = (modalCardDetails) =>{
 
 loadApiData(6);
 
-/*
+/* ------ sort by date ------ */
+document.getElementById('sort-by-date').addEventListener('click', ()=>{
+  /* ------ load Api ------ */
+const loadData = async (dataLimitSortDate) => {
+  try {
+    const res = await fetch(
+      `https://openapi.programming-hero.com/api/ai/tools`
+    );
+    const data = await res.json();
+    displaySortByData(data.data.tools, dataLimitSortDate);
+  } catch (error) {
+    alert(error);
+  }
+};
+const displaySortByData = (sortDate,dataLimitSortDate) =>{
+  const customSort = (a,b) =>{
+      const dateA = new Date(a.published_in);
+      const dateB = new Date(b.published_in);
+      return dateA - dateB;
+  }
+  let newData = sortDate.sort(customSort);
+  const cardContainer = document.getElementById("card-container");
+  cardContainer.innerText = "";
 
-*/
+  const seeMoreSortDate = document.getElementById("see-more");
+  if (dataLimitSortDate && newData.length > 6) {
+    newData = newData.slice(0, 6);
+    seeMoreSortDate.classList.remove("hidden");
+  } else {
+    seeMoreSortDate.classList.add("hidden");
+  }
+  
+
+  newData.forEach((elementSort) => {
+
+    const cardItems = elementSort.features;
+    let elementFeatures = `<ol class="list-decimal ml-5">`;
+    for (const iteratorItems of cardItems) {
+      elementFeatures += `<li>${iteratorItems}</li>`
+    }
+
+    const cardData = document.createElement("div");
+    cardData.innerHTML = `
+    <div class="card w-96 h-[30rem] glass">
+        <figure><img class="h-48 w-full p-2 rounded-2xl" src="${
+          elementSort.image
+        }" alt="Card Images"/></figure>
+        <div class="card-body">
+            <h2 class="card-title">Features</h2>
+            <div>${elementFeatures}</div>
+            <hr>
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="card-title my-2">${elementSort.name}</h2>
+                    <div class="text-gray-400">
+                        <span><i class="fa fa-calendar"></i></span> ${
+                          elementSort.published_in
+                        }
+                    </div>
+                </div>
+                <label for="detailsMore" class="bg-red-50 hover:bg-red-300 cursor-pointer h-10 w-10 rounded-full flex items-center justify-center" onclick="detailsApi(${elementSort.id})">
+                    <i class="fa fa-arrow-right"></i>
+                </label>
+            </div>
+        </div>
+    </div>
+    `;
+    cardContainer.appendChild(cardData);
+  });
+  document.getElementById("btn-see-more").addEventListener("click", () => {
+    loadData();
+  });
+}
+
+loadData(6);
+})
