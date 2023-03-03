@@ -24,25 +24,22 @@ const displayData = (hubData, dataLimit) => {
   }
 
   hubData.forEach((element) => {
+
+    const cardItems = element.features;
+    let elementFeatures = `<ol class="list-decimal ml-5">`;
+    for (const iteratorItems of cardItems) {
+      elementFeatures += `<li>${iteratorItems}</li>`
+    }
+
     const cardData = document.createElement("div");
     cardData.innerHTML = `
-    <div class="card w-96 glass">
+    <div class="card w-96 h-[30rem] glass">
         <figure><img class="h-48 w-full p-2 rounded-2xl" src="${
           element.image
         }" alt="Card Images"/></figure>
         <div class="card-body">
             <h2 class="card-title">Features</h2>
-            <ol class="list-decimal ml-5">
-                <li>${
-                  element.features[0] ? element.features[0] : "No data Found"
-                }</li>
-                <li>${
-                  element.features[1] ? element.features[1] : "No data Found"
-                }</li>
-                <li>${
-                  element.features[2] ? element.features[2] : "No data Found"
-                }</li>
-            </ol>
+            <div>${elementFeatures}</div>
             <hr>
             <div class="flex justify-between items-center">
                 <div>
@@ -103,28 +100,43 @@ const detailsApi = async (elementId) => {
 const modalDetails = (modalCardDetails) =>{
   document.getElementById('details-card').innerText = modalCardDetails.data.description;
   /* ------ features details ------ */
+   const featuresItems = modalCardDetails.data.features;
+   let featuresDetail = `<ul class="list-disc">`;
+   for (const detailsFeaturesItems in featuresItems) {
+     const newFeaturesItems = featuresItems[detailsFeaturesItems];
+     if (newFeaturesItems.length < 0) {
+      featuresDetail += `<li>No data Found</li>`;
+    } else { 
+      featuresDetail += `<li>${featuresItems[detailsFeaturesItems].feature_name}</li>`;
+     }
+   }
+
   const featuresDetailsList = document.getElementById('features-details');
   featuresDetailsList.innerText = '';
-  const featuresDetailsListItems = document.createElement('ul');
-  featuresDetailsListItems.classList.add('list-disc');
+  const featuresDetailsListItems = document.createElement('div');
   featuresDetailsListItems.innerHTML =`
-    <li>${modalCardDetails.data.features[1].feature_name ? modalCardDetails.data.features[1].feature_name : 'No data Found'}</li>
-    <li>${modalCardDetails.data.features[2].feature_name ? modalCardDetails.data.features[2].feature_name : 'No data Found'}</li>
-    <li>${modalCardDetails.data.features[3].feature_name ? modalCardDetails.data.features[3].feature_name : 'No data Found'}</li>
+    <div>${featuresDetail}</div>
   `;
   featuresDetailsList.appendChild(featuresDetailsListItems);
 
 
   /* ------ integrations details ------ */
+   const integrationsItems = modalCardDetails.data.integrations;
+   let integrationsDetail = `<ul class="list-disc">`;
+   for (const detailsIntegrationsItems in integrationsItems) {
+    const newIntegrationsItems = integrationsItems[detailsIntegrationsItems];
+    if (newIntegrationsItems.length < 0) {
+      integrationsDetail += `<li>No data Found</li>`;
+    } else {
+      integrationsDetail += `<li>${newIntegrationsItems}</li>`;
+    }
+   }
+
   const integrationsDetailsList = document.getElementById('integrations-details');
   integrationsDetailsList.innerText ='';
   const integrationsDetailsListItems = document.createElement('ul');
-  integrationsDetailsListItems.classList.add('list-disc');
   integrationsDetailsListItems.innerHTML = `
-    <li>${modalCardDetails.data.integrations[0] ? modalCardDetails.data.integrations[0] : 'No data Found'}</li>
-    <li>${modalCardDetails.data.integrations[1] ? modalCardDetails.data.integrations[1] : 'No data Found'}</li>
-    <li>${modalCardDetails.data.integrations[2] ? modalCardDetails.data.integrations[2] : 'No data Found'}</li>
-    <li>${modalCardDetails.data.integrations[3] ? modalCardDetails.data.integrations[3] : 'No data Found'}</li>
+    <div>${integrationsDetail}</div>
   `;
   integrationsDetailsList.appendChild(integrationsDetailsListItems);
 
@@ -134,6 +146,12 @@ const modalDetails = (modalCardDetails) =>{
   document.getElementById('details-card-output').innerText = modalCardDetails.data.input_output_examples[0].output;
 } 
 
+
+  /* ------ loader ------ */
+  const preLoader = document.getElementById('spinner')
+  const loader = () =>{
+    preLoader.classList.add('hidden');
+  }
 
 loadApiData(6);
 
