@@ -156,6 +156,10 @@ const modalDetails = (modalCardDetails) =>{
     accuracy.classList.remove('hidden');
     document.getElementById('percentage-accuracy').innerText = newAccuracy * 100;
   }
+  /* ------ pricing ------ */
+  document.getElementById('pricing-basic').innerText = `${modalCardDetails.data.pricing[0].price}  ${modalCardDetails.data.pricing[0].plan}`;
+  document.getElementById('pricing-pro').innerText = `${modalCardDetails.data.pricing[1].price}  ${modalCardDetails.data.pricing[1].plan}`;
+  document.getElementById('pricing-enterprise').innerText = `${modalCardDetails.data.pricing[2].price}  ${modalCardDetails.data.pricing[2].plan}`;
 } 
 
 
