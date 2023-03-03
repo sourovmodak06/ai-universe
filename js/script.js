@@ -128,8 +128,8 @@ const modalDetails = (modalCardDetails) =>{
 
   document.getElementById('details-img').src = modalCardDetails.data.image_link[0];
   document.getElementById('details-card-input').innerText = modalCardDetails.data.input_output_examples[0].input;
-  document.getElementById('details-card-output').innerText = modalCardDetails.data.input_output_examples[0].output;
-
+  document.getElementById('details-card-output').innerText = `${(modalCardDetails.data.input_output_examples[0].output).length > 0 ? modalCardDetails.data.input_output_examples[0].output : 'No! Not Yet! Take a break!!!'}`;
+  
 
   
   /* ------ show accuracy ------ */
