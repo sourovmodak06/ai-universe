@@ -144,6 +144,18 @@ const modalDetails = (modalCardDetails) =>{
   document.getElementById('details-img').src = modalCardDetails.data.image_link[0];
   document.getElementById('details-card-input').innerText = modalCardDetails.data.input_output_examples[0].input;
   document.getElementById('details-card-output').innerText = modalCardDetails.data.input_output_examples[0].output;
+
+
+  
+  /* ------ show accuracy ------ */
+  const accuracy = document.getElementById('show-accuracy');
+  const newAccuracy = modalCardDetails.data.accuracy.score;
+  if (newAccuracy <= 0) {
+    accuracy.classList.add('hidden');
+  } else {
+    accuracy.classList.remove('hidden');
+    document.getElementById('percentage-accuracy').innerText = newAccuracy * 100;
+  }
 } 
 
 
