@@ -92,14 +92,48 @@ const detailsApi = async (elementId) => {
       `https://openapi.programming-hero.com/api/ai/tool/${elementId <= 9 ? ('0' + elementId) : ('' + elementId)}`
     );
     const data = await res.json();
-    console.log(data);
+    modalDetails(data);
   } 
   catch (error) {
-    alert(error);
+    console.log(error); 
   }
 };
 
 /* ------ Display Details Data ------ */
+const modalDetails = (modalCardDetails) =>{
+  document.getElementById('details-card').innerText = modalCardDetails.data.description;
+  /* ------ features details ------ */
+  const featuresDetailsList = document.getElementById('features-details');
+  featuresDetailsList.innerText = '';
+  const featuresDetailsListItems = document.createElement('ul');
+  featuresDetailsListItems.classList.add('list-disc');
+  featuresDetailsListItems.innerHTML =`
+    <li>${modalCardDetails.data.features[1].feature_name ? modalCardDetails.data.features[1].feature_name : 'No data Found'}</li>
+    <li>${modalCardDetails.data.features[2].feature_name ? modalCardDetails.data.features[2].feature_name : 'No data Found'}</li>
+    <li>${modalCardDetails.data.features[3].feature_name ? modalCardDetails.data.features[3].feature_name : 'No data Found'}</li>
+  `;
+  featuresDetailsList.appendChild(featuresDetailsListItems);
+
+
+  /* ------ integrations details ------ */
+  const integrationsDetailsList = document.getElementById('integrations-details');
+  integrationsDetailsList.innerText ='';
+  const integrationsDetailsListItems = document.createElement('ul');
+  integrationsDetailsListItems.classList.add('list-disc');
+  integrationsDetailsListItems.innerHTML = `
+    <li>${modalCardDetails.data.integrations[0] ? modalCardDetails.data.integrations[0] : 'No data Found'}</li>
+    <li>${modalCardDetails.data.integrations[1] ? modalCardDetails.data.integrations[1] : 'No data Found'}</li>
+    <li>${modalCardDetails.data.integrations[2] ? modalCardDetails.data.integrations[2] : 'No data Found'}</li>
+    <li>${modalCardDetails.data.integrations[3] ? modalCardDetails.data.integrations[3] : 'No data Found'}</li>
+  `;
+  integrationsDetailsList.appendChild(integrationsDetailsListItems);
+
+
+  document.getElementById('details-img').src = modalCardDetails.data.image_link[0];
+  document.getElementById('details-card-input').innerText = modalCardDetails.data.input_output_examples[0].input;
+  document.getElementById('details-card-output').innerText = modalCardDetails.data.input_output_examples[0].output;
+} 
+
 
 loadApiData(6);
 
